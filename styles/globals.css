@@ -24,3 +24,26 @@ a {
     font-family: Vazirmatn, sans-serif;
   }
 }
+
+.test {
+  width: 80%;
+  animation: fly 4s infinite linear;
+}
+
+@keyframes fly {
+  0% {
+    transform: translate(15px, 15px);
+  }
+  25% {
+    transform: translate(-15px, -15px);
+  }
+  50% {
+    transform: translate(15px, 15px);
+  }
+  75% {
+    transform: translate(-15px, -15px);
+  }
+  100% {
+    transform: translate(15px, 15px);
+  }
+}

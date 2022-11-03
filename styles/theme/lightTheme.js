@@ -15,6 +15,9 @@ const lightTheme = createTheme({
       margin: "1rem 0",
       fontFamily: "Vazirmatn",
     },
+    h4: {
+      fontFamily: "Vazirmatn",
+    },
   },
 });
 

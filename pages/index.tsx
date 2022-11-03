@@ -1,98 +1,106 @@
-import { Grid, Typography, Link } from "@mui/material";
-import type { NextPage } from "next";
-import Layout from "../components/layout";
-import NextLink from "next/link";
-import db from "../utility/db";
-import Product from "../models/Product";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useContext } from "react";
-import { Store } from "../utility/Store";
-import ProductItem from "../components/ProductItem";
-import Carousel from "react-material-ui-carousel";
+import { Grid, Typography, Container, Button } from "@mui/material";
+import { ReactElement } from "react";
+import * as styles from "../styles/styles.home";
+import Image from "next/image";
+import FeatureItem from "../components/feature";
+import PublicLayout from "../components/publicLayout";
+import { NextPageWithLayout } from "./_app";
+import Link from "next/link";
 
-const Home: NextPage = (props: any) => {
-  // const { products } = props;
-  const { topRatedProducts, featuredProducts } = props;
-
-  const router = useRouter();
-  const { state, dispatch } = useContext(Store);
-
-  const addToCartHandler = async (product: any) => {
-    const existItem = state.cart.cartItems.find(
-      (x: any) => x._id === product._id
-    );
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
-    if (data.countInStock < quantity) {
-      window.alert("Sorry. Product is out of stock");
-      return;
-    }
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
-    router.push("/cart");
-  };
+const Home: NextPageWithLayout = (props: any) => {
   return (
-    <Layout>
-      <Carousel animation="slide">
-        {featuredProducts.map((product: any) => (
-          <NextLink
-            key={product._id}
-            href={`/product/${product.slug}`}
-            passHref
-            legacyBehavior
-          >
-            <Link>
-              <img src={product.featuredImage} alt={product.name}></img>
-            </Link>
-          </NextLink>
-        ))}
-      </Carousel>
-      <Typography variant="h2">محصولات پرفروش</Typography>
-      <Grid container spacing={3}>
-        {topRatedProducts.map((product: any) => (
-          <Grid item md={4} key={product.name}>
-            <ProductItem
-              product={product}
-              addToCartHandler={addToCartHandler}
-            />
+    <Grid container>
+      <Grid container sx={styles.titleSection} position="relative">
+        <Grid item xs={6} sx={{ textAlign: "center", alignSelf: "center" }}>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography variant="h2" sx={{ color: "#fff" }}>
+                نرم افزار فروش ملون
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h5" sx={{ color: "#fff" }}>
+                کسب و کارت رو حرفه ای کن
+              </Typography>
+            </Grid>
           </Grid>
-        ))}
+        </Grid>
+        <Grid item xs={6} sx={{ textAlign: "center" }}>
+          <Image
+            alt="progress"
+            src="/images/progress.svg"
+            width={400}
+            height={400}
+          />
+        </Grid>
+        <img
+          src="/images/intro-vector.svg"
+          style={{
+            position: "absolute",
+            width: "100%",
+            bottom: -1,
+          }}
+        />
       </Grid>
-    </Layout>
+      <Container>
+        <Grid container mt={10} mb={10} justifyContent="center">
+          <Link href="/login">
+            <Button variant="contained" color="primary">
+              <Typography variant="h4">ورود به سامانه</Typography>
+            </Button>
+          </Link>
+        </Grid>
+        <Grid container mt={10} mb={10}>
+          <Grid xs={4}>
+            <Image
+              src="/images/fastWorking.svg"
+              alt="asd"
+              width={150}
+              height={150}
+              className="test"
+            ></Image>
+          </Grid>
+          <Grid
+            xs={8}
+            sx={{
+              textAlign: "center",
+              alignSelf: "center",
+            }}
+          >
+            <Typography variant="h4" sx={{ color: "#ff5500" }}>
+              در کمترین زمان فروشت رو بیشتر کن و هزینه هات رو کم کن
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container justifyContent="space-around" mb={2}>
+          <Grid item xs={12} textAlign="center" pb={5}>
+            <Typography variant="h3" sx={{ color: "#ff5500" }}>
+              امکانات نرم افزار ملون
+            </Typography>
+          </Grid>
+          <FeatureItem image="/images/melon1.svg" title="فروش حق العمل کاری" />
+          <FeatureItem image="/images/melon2.svg" title="گزارش گیری" />
+          <FeatureItem image="/images/melon3.svg" title="شخصی سازی" />
+        </Grid>
+
+        <Grid container justifyContent="space-around" mt={10} mb={2}>
+          <Grid item xs={12} textAlign="center" pb={5}>
+            <Typography variant="h3" sx={{ color: "#ff5500" }}>
+              مشتریان
+            </Typography>
+          </Grid>
+          <FeatureItem image="/images/melon1.svg" title="فروش حق العمل کاری" />
+          <FeatureItem image="/images/melon2.svg" title="گزارش گیری" />
+          <FeatureItem image="/images/melon3.svg" title="شخصی سازی" />
+        </Grid>
+      </Container>
+    </Grid>
   );
 };
 
 export default Home;
 
-export async function getServerSideProps() {
-  // await db.connect();
-  // const products = await Product.find({}, "-reviews").lean();
-
-  // await db.disconnect();
-  // return {
-  //   props: {
-  //     products: products.map(db.convertDocToObj),
-  //   },
-  // };
-
-  await db.connect();
-  const featuredProductsDocs = await Product.find(
-    { isFeatured: true },
-    "-reviews"
-  )
-    .lean()
-    .limit(3);
-  const topRatedProductsDocs = await Product.find({}, "-reviews")
-    .lean()
-    .sort({
-      rating: -1,
-    })
-    .limit(6);
-  await db.disconnect();
-  return {
-    props: {
-      featuredProducts: featuredProductsDocs.map(db.convertDocToObj),
-      topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
-    },
-  };
-}
+Home.getLayout = function getLayout(Home: ReactElement) {
+  return <PublicLayout>{Home}</PublicLayout>;
+};
