@@ -27,6 +27,9 @@ import { Store } from "../../utility/Store";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { Vazirmatn } from "@next/font/google";
+
+const vazirMatn = Vazirmatn();
 
 function Layout({ title, description, children }: any) {
   const router = useRouter();
@@ -85,7 +88,7 @@ function Layout({ title, description, children }: any) {
   }, []);
 
   return (
-    <div>
+    <div className={vazirMatn.className}>
       <Head>
         <title>{title ? `${title} - Next Store` : "Next Store"}</title>
         {description && <meta name="description" content={description}></meta>}
@@ -107,7 +110,7 @@ function Layout({ title, description, children }: any) {
                 </IconButton>
                 <NextLink href="/" passHref legacyBehavior>
                   <Link>
-                    <Typography>Next Store</Typography>
+                    <Typography>تست فونت</Typography>
                   </Link>
                 </NextLink>
               </Box>

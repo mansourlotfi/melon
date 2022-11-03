@@ -47,7 +47,7 @@ const Home: NextPage = (props: any) => {
           </NextLink>
         ))}
       </Carousel>
-      <Typography variant="h2">Popular Products</Typography>
+      <Typography variant="h2">محصولات پرفروش</Typography>
       <Grid container spacing={3}>
         {topRatedProducts.map((product: any) => (
           <Grid item md={4} key={product.name}>
