@@ -51,7 +51,7 @@ const Home: NextPageWithLayout = (props: any) => {
           </Link>
         </Grid>
         <Grid container mt={10} mb={10}>
-          <Grid xs={4}>
+          <Grid item xs={4}>
             <Image
               src="/images/fastWorking.svg"
               alt="asd"
@@ -61,6 +61,7 @@ const Home: NextPageWithLayout = (props: any) => {
             ></Image>
           </Grid>
           <Grid
+            item
             xs={8}
             sx={{
               textAlign: "center",

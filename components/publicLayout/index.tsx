@@ -19,7 +19,7 @@ function PublicLayout({ title, description, children }: any) {
   return (
     <div className={vazirMatn.className}>
       <Head>
-        <title>{title ? `${title} - Next Store` : "Next Store"}</title>
+        <title>{title ? `${title} - Melon` : "Melon"}</title>
         {description && <meta name="description" content={description}></meta>}
       </Head>
       <Grid container flexDirection="column" component={Paper}>
@@ -27,9 +27,9 @@ function PublicLayout({ title, description, children }: any) {
           <AppBar position="static" sx={styles.navbar}>
             <Toolbar>
               <Box display="flex" alignItems="center">
-                <NextLink href="/" passHref legacyBehavior>
+                <NextLink href="/login" passHref legacyBehavior>
                   <Link>
-                    <Typography>تست فونت</Typography>
+                    <Typography>ورود به سامانه </Typography>
                   </Link>
                 </NextLink>
               </Box>

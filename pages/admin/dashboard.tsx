@@ -20,7 +20,6 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-Chart.register(...registerables);
 
 function reducer(state: any, action: any) {
   switch (action.type) {
@@ -36,6 +35,8 @@ function reducer(state: any, action: any) {
 }
 
 function AdminDashboard() {
+  Chart.register(...registerables);
+
   const { state } = useContext(Store);
   const router = useRouter();
   const { userInfo } = state;

@@ -2,8 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 import React, { useContext, useEffect } from "react";
-import Layout from "../components/layout";
-import { Store } from "../utility/Store";
+
 // import useStyles from '../utility/styles';
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
@@ -19,24 +18,19 @@ import {
 // import { useSnackbar } from 'notistack';
 // import { getError } from '../utility/error';
 import { toast } from "react-toastify";
+import { Store } from "../../../utility/Store";
+import Layout from "../../../components/layout";
 
-export default function Register() {
+export default function RegisterBrooker() {
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
-  // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
   const { redirect } = router.query;
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
-  useEffect(() => {
-    if (userInfo) {
-      router.push("/dashboard");
-    }
-  }, []);
-
   // const classes = useStyles();
   const submitHandler = async ({
     name,
@@ -50,24 +44,21 @@ export default function Register() {
       return toast.error("رمز ورود با تکرار آن مطابقت ندارد");
     }
     try {
-      const { data } = await axios.post("/api/users/register", {
+      const { data } = await axios.post("/api/admin/users/register-brooker", {
         name,
         email,
         phone,
+        adminId: userInfo._id,
         password,
       });
-      dispatch({ type: "USER_LOGIN", payload: data });
-      Cookies.set("userInfo", data);
       // router.push(redirect?.toString() || "/admin/dashboard");
-      router.push("/admin/dashboard");
+      router.push("/admin/users");
       toast.success("کاربر ایجاد شد");
     } catch (err: any) {
-      // enqueueSnackbar(getError(err), { variant: "error" });
       toast.error(err.response?.data);
     }
   };
 
-  console.log("errors", errors);
   return (
     <Layout title="Register">
       <Grid container justifyContent="center">
@@ -233,16 +224,6 @@ export default function Register() {
                 >
                   ورود
                 </Button>
-              </ListItem>
-              <ListItem>
-                قبلا ثبت نام کردید؟ &nbsp;
-                <NextLink
-                  href={`/login?redirect=${redirect || "/"}`}
-                  passHref
-                  legacyBehavior
-                >
-                  <Link>ورود</Link>
-                </NextLink>
               </ListItem>
             </List>
           </form>

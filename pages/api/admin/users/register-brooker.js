@@ -1,8 +1,8 @@
 import nc from "next-connect";
 import bcrypt from "bcryptjs";
-import User from "../../../models/User";
-import db from "../../../utility/db";
-import { signToken } from "../../../utility/auth";
+import User from "../../../../models/User";
+import db from "../../../../utility/db";
+import { signToken } from "../../../../utility/auth";
 
 const handler = nc();
 
@@ -12,22 +12,15 @@ handler.post(async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
+    adminId: req.body.adminId,
     password: bcrypt.hashSync(req.body.password),
-    isAdmin: true,
-    isBrooker: false,
+    isAdmin: false,
+    isBrooker: true,
   });
   const user = await newUser.save();
   await db.disconnect();
 
-  const token = signToken(user);
-  res.send({
-    token,
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-    isAdmin: user.isAdmin,
-  });
+  res.send({ message: `user ${user.name} created successfully` });
 });
 
 export default handler;

@@ -164,15 +164,40 @@ function UserEdit({ params }: any) {
                             variant="outlined"
                             fullWidth
                             id="name"
-                            label="Name"
+                            label="نام"
                             error={Boolean(errors.name)}
-                            helperText={errors.name ? "Name is required" : ""}
+                            helperText={
+                              errors.name ? "وارد کردن نام ضروری است" : ""
+                            }
                             {...field}
                           ></TextField>
                         )}
                       ></Controller>
                     </ListItem>
                     <ListItem>
+                      <Controller
+                        name="phone"
+                        control={control}
+                        defaultValue=""
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field }) => (
+                          <TextField
+                            variant="outlined"
+                            fullWidth
+                            id="phone"
+                            label="موبایل"
+                            error={Boolean(errors.phone)}
+                            helperText={
+                              errors.phone ? "وارد کردن موبایل ضروری است" : ""
+                            }
+                            {...field}
+                          ></TextField>
+                        )}
+                      ></Controller>
+                    </ListItem>
+                    {/* <ListItem>
                       <FormControlLabel
                         label="Is Admin"
                         control={
@@ -183,7 +208,7 @@ function UserEdit({ params }: any) {
                           />
                         }
                       ></FormControlLabel>
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem>
                       <Button
                         variant="contained"

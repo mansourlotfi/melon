@@ -1,8 +1,6 @@
 import React from "react";
 import { CacheProvider } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-
-import createEmotionCache from "../utility/createEmotionCache";
 import { StoreProvider } from "../utility/Store";
 import lightTheme from "../styles/theme/lightTheme";
 import type { ReactElement, ReactNode } from "react";
@@ -11,11 +9,8 @@ import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import createCache from "@emotion/cache";
 import rtlPlugin from "stylis-plugin-rtl";
-// import { prefixer } from 'stylis';
-// const cacheRtl = createCache({
-//   key: 'muirtl',
-//   stylisPlugins: [prefixer, rtlPlugin],
-// });
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const cacheRtl = createCache({ key: "muirtl", stylisPlugins: [rtlPlugin] });
 
@@ -36,6 +31,18 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
         <ThemeProvider theme={lightTheme}>
           <CssBaseline />
           <Component {...pageProps} />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
         </ThemeProvider>
       </CacheProvider>
     </StoreProvider>

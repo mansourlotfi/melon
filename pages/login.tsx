@@ -2,7 +2,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 import React, { useContext, useEffect } from "react";
-import Layout from "../components/layout";
 import { Store } from "../utility/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
@@ -15,7 +14,10 @@ import {
   TextField,
   Button,
   Link,
+  Grid,
 } from "@mui/material";
+import PublicLayout from "../components/publicLayout";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const {
@@ -30,9 +32,10 @@ export default function Login() {
   const { userInfo } = state;
   useEffect(() => {
     if (userInfo) {
-      router.push("/");
+      router.push("/admin/dashboard");
     }
   }, []);
+  console.log("userInfo", userInfo);
 
   const submitHandler = async ({ email, password }: any) => {
     // closeSnackbar();
@@ -43,93 +46,107 @@ export default function Login() {
       });
       dispatch({ type: "USER_LOGIN", payload: data });
       Cookies.set("userInfo", data);
-      router.push(redirect?.toString() || "/");
-    } catch (err) {
+      router.push("/admin/dashboard");
+    } catch (err: any) {
+      console.log("err.response", err.response);
       // enqueueSnackbar(getError(err), { variant: "error" });
+      toast.error(err.response?.data?.message ?? "اشکالی وجود دارد");
     }
   };
   return (
-    <Layout title="Login">
-      <form onSubmit={handleSubmit(submitHandler)}>
-        <Typography component="h1" variant="h1">
-          Login
-        </Typography>
-        <List>
-          <ListItem>
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-              }}
-              render={({ field }: any) => (
-                <TextField
-                  variant="outlined"
+    <PublicLayout title="Login">
+      <Grid container justifyContent="center">
+        <Grid item lg={6} md={6} xs={12}>
+          <form
+            onSubmit={handleSubmit(submitHandler)}
+            style={{ width: "100%" }}
+          >
+            <Typography component="h1" variant="h1">
+              ورود
+            </Typography>
+            <List>
+              <ListItem>
+                <Controller
+                  name="email"
+                  control={control}
+                  defaultValue=""
+                  rules={{
+                    required: true,
+                    pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                  }}
+                  render={({ field }: any) => (
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      id="email"
+                      label="ایمیل"
+                      inputProps={{ type: "email" }}
+                      error={Boolean(errors.email)}
+                      helperText={
+                        errors.email
+                          ? errors.email.type === "pattern"
+                            ? "Email is not valid"
+                            : "Email is required"
+                          : ""
+                      }
+                      {...field}
+                    ></TextField>
+                  )}
+                ></Controller>
+              </ListItem>
+              <ListItem>
+                <Controller
+                  name="password"
+                  control={control}
+                  defaultValue=""
+                  rules={{
+                    required: true,
+                    minLength: 6,
+                  }}
+                  render={({ field }: any) => (
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      id="password"
+                      label="رمز عبور"
+                      inputProps={{ type: "password" }}
+                      error={Boolean(errors.password)}
+                      helperText={
+                        errors.password
+                          ? errors.password.type === "minLength"
+                            ? "Password length is more than 5"
+                            : "Password is required"
+                          : ""
+                      }
+                      {...field}
+                    ></TextField>
+                  )}
+                ></Controller>
+              </ListItem>
+              <ListItem>
+                <Button
+                  variant="contained"
+                  type="submit"
                   fullWidth
-                  id="email"
-                  label="Email"
-                  inputProps={{ type: "email" }}
-                  error={Boolean(errors.email)}
-                  helperText={
-                    errors.email
-                      ? errors.email.type === "pattern"
-                        ? "Email is not valid"
-                        : "Email is required"
-                      : ""
-                  }
-                  {...field}
-                ></TextField>
-              )}
-            ></Controller>
-          </ListItem>
-          <ListItem>
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                minLength: 6,
-              }}
-              render={({ field }: any) => (
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  id="password"
-                  label="Password"
-                  inputProps={{ type: "password" }}
-                  error={Boolean(errors.password)}
-                  helperText={
-                    errors.password
-                      ? errors.password.type === "minLength"
-                        ? "Password length is more than 5"
-                        : "Password is required"
-                      : ""
-                  }
-                  {...field}
-                ></TextField>
-              )}
-            ></Controller>
-          </ListItem>
-          <ListItem>
-            <Button variant="contained" type="submit" fullWidth color="primary">
-              Login
-            </Button>
-          </ListItem>
-          <ListItem>
-            Don&apos;t have an account? &nbsp;
-            <NextLink
-              href={`/register?redirect=${redirect || "/"}`}
-              passHref
-              legacyBehavior
-            >
-              <Link>Register</Link>
-            </NextLink>
-          </ListItem>
-        </List>
-      </form>
-    </Layout>
+                  color="primary"
+                >
+                  ورود
+                </Button>
+              </ListItem>
+              <ListItem>
+                ثبت نام نکردید؟ &nbsp;
+                <NextLink
+                  href={`/register?redirect=${redirect || "/"}`}
+                  passHref
+                  legacyBehavior
+                >
+                  <Link>ثبت نام سریع</Link>
+                </NextLink>
+              </ListItem>
+            </List>
+          </form>
+        </Grid>
+      </Grid>
+    </PublicLayout>
   );
 }

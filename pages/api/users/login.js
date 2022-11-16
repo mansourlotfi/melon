@@ -17,7 +17,10 @@ handler.post(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      phone: user.phone,
       isAdmin: user.isAdmin,
+      isBrooker: user.isBrooker,
+      adminId: user.adminId,
     });
   } else {
     res.status(401).send({ message: "Invalid email or password" });

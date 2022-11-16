@@ -49,6 +49,7 @@ function AdminUsers() {
   const { state } = useContext(Store);
   const router = useRouter();
   const { userInfo } = state;
+  console.log("userInfo", userInfo);
 
   const [{ loading, error, users, successDelete, loadingDelete }, dispatch] =
     useReducer(reducer, {
@@ -64,13 +65,14 @@ function AdminUsers() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/users`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
+        const { data } = await axios.get(
+          `/api/admin/users?adminId=${userInfo._id}`,
+          {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+          }
+        );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        // dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-      }
+      } catch (err) {}
     };
     if (successDelete) {
       dispatch({ type: "DELETE_RESET" });
@@ -127,7 +129,7 @@ function AdminUsers() {
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  Users
+                  کاربران
                 </Typography>
                 {loadingDelete && <CircularProgress />}
               </ListItem>
@@ -142,11 +144,11 @@ function AdminUsers() {
                     <Table>
                       <TableHead>
                         <TableRow>
-                          <TableCell>ID</TableCell>
-                          <TableCell>NAME</TableCell>
-                          <TableCell>EMAIL</TableCell>
-                          <TableCell>ISADMIN</TableCell>
-                          <TableCell>ACTIONS</TableCell>
+                          <TableCell>کد</TableCell>
+                          <TableCell>نام</TableCell>
+                          <TableCell>ایمیل</TableCell>
+                          <TableCell>ادمین</TableCell>
+                          <TableCell>عملیات</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -163,7 +165,7 @@ function AdminUsers() {
                                 legacyBehavior
                               >
                                 <Button size="small" variant="contained">
-                                  Edit
+                                  ویرایش
                                 </Button>
                               </NextLink>{" "}
                               <Button
@@ -171,7 +173,7 @@ function AdminUsers() {
                                 size="small"
                                 variant="contained"
                               >
-                                Delete
+                                حذف
                               </Button>
                             </TableCell>
                           </TableRow>

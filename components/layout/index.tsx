@@ -28,6 +28,8 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { Vazirmatn } from "@next/font/google";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const vazirMatn = Vazirmatn();
 
@@ -90,14 +92,20 @@ function Layout({ title, description, children }: any) {
   return (
     <div className={vazirMatn.className}>
       <Head>
-        <title>{title ? `${title} - Next Store` : "Next Store"}</title>
+        <title>{title ? `${title} - Melon` : "Melon"}</title>
         {description && <meta name="description" content={description}></meta>}
       </Head>
       <Grid container flexDirection="column" component={Paper}>
         <Grid item container>
           <AppBar position="static" sx={styles.navbar}>
-            <Toolbar>
-              <Box display="flex" alignItems="center">
+            <Toolbar
+              sx={{
+                overflow: "hidden",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <Box display="flex" alignItems="center" sx={{ width: "100" }}>
                 <IconButton
                   edge="start"
                   aria-label="open drawer"
@@ -105,87 +113,70 @@ function Layout({ title, description, children }: any) {
                   sx={{ color: "#fff" }}
                   // className={classes.menuButton}
                 >
-                  {/* <MenuIcon  /> */}
-                  ||||
+                  <MenuIcon />
                 </IconButton>
-                <NextLink href="/" passHref legacyBehavior>
-                  <Link>
-                    <Typography>تست فونت</Typography>
-                  </Link>
-                </NextLink>
               </Box>
               <Drawer
                 anchor="left"
                 open={sidbarVisible}
                 onClose={sidebarCloseHandler}
               >
-                <List>
+                <List sx={{ minWidth: 200 }}>
                   <ListItem>
-                    <Box
-                      display="flex"
+                    <Grid
+                      container
                       alignItems="center"
                       justifyContent="space-between"
                     >
-                      <Typography>Shopping by category</Typography>
-                      <IconButton
-                        aria-label="close"
-                        onClick={sidebarCloseHandler}
-                      >
-                        *close
-                      </IconButton>
-                    </Box>
+                      <Grid item>
+                        <Typography>ملون</Typography>
+                      </Grid>
+                      <Grid item>
+                        <IconButton
+                          aria-label="close"
+                          onClick={sidebarCloseHandler}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </ListItem>
                   <Divider light />
-                  {categories.map((category) => (
-                    <NextLink
-                      key={category}
-                      href={`/search?category=${category}`}
-                      passHref
-                      legacyBehavior
-                    >
-                      <ListItem
-                        button
-                        component="a"
-                        onClick={sidebarCloseHandler}
+                  {userInfo?.isAdmin && (
+                    <>
+                      <NextLink href="/admin/dashboard" passHref legacyBehavior>
+                        <ListItem selected button component="a">
+                          <ListItemText primary="پنل ادمین"></ListItemText>
+                        </ListItem>
+                      </NextLink>
+                      <NextLink href="/admin/orders" passHref legacyBehavior>
+                        <ListItem button component="a">
+                          <ListItemText primary="سفارشات"></ListItemText>
+                        </ListItem>
+                      </NextLink>
+                      <NextLink href="/admin/products" passHref legacyBehavior>
+                        <ListItem button component="a">
+                          <ListItemText primary="محصولات"></ListItemText>
+                        </ListItem>
+                      </NextLink>
+                      <NextLink href="/admin/users" passHref legacyBehavior>
+                        <ListItem button component="a">
+                          <ListItemText primary="کاربران"></ListItemText>
+                        </ListItem>
+                      </NextLink>
+                      <NextLink
+                        href="/admin/user/register-brooker"
+                        passHref
+                        legacyBehavior
                       >
-                        <ListItemText primary={category}></ListItemText>
-                      </ListItem>
-                    </NextLink>
-                  ))}
+                        <ListItem button component="a">
+                          <ListItemText primary="فروشنده جدید"></ListItemText>
+                        </ListItem>
+                      </NextLink>
+                    </>
+                  )}
                 </List>
               </Drawer>
-              <Grid item flexGrow={1} textAlign="center" alignSelf="center">
-                <form onSubmit={submitHandler}>
-                  <InputBase
-                    name="query"
-                    placeholder="Search products"
-                    onChange={queryChangeHandler}
-                    sx={{ backgroundColor: "#fff" }}
-                  />
-                  <IconButton
-                    type="submit"
-                    aria-label="search"
-                    sx={{ color: "#fff" }}
-                  >
-                    search
-                  </IconButton>
-                </form>
-              </Grid>
-
-              <NextLink href="/cart" passHref legacyBehavior>
-                <Link>
-                  {cart.cartItems.length > 0 ? (
-                    <Badge
-                      badgeContent={cart.cartItems.length}
-                      color="secondary"
-                    >
-                      Cart
-                    </Badge>
-                  ) : (
-                    "Cart"
-                  )}
-                </Link>
-              </NextLink>
 
               {userInfo ? (
                 <>
@@ -206,14 +197,14 @@ function Layout({ title, description, children }: any) {
                     <MenuItem
                       onClick={(e) => loginMenuCloseHandler(e, "/profile")}
                     >
-                      Profile
+                      پروفایل
                     </MenuItem>
                     <MenuItem
                       onClick={(e) =>
                         loginMenuCloseHandler(e, "/order-history")
                       }
                     >
-                      Order Hisotry
+                      تاریخچه سفارشات
                     </MenuItem>
                     {userInfo.isAdmin && (
                       <MenuItem
@@ -221,16 +212,16 @@ function Layout({ title, description, children }: any) {
                           loginMenuCloseHandler(e, "/admin/dashboard")
                         }
                       >
-                        Admin Dashboard
+                        پنل ادمین
                       </MenuItem>
                     )}
-                    <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
+                    <MenuItem onClick={logoutClickHandler}>خروج</MenuItem>
                   </Menu>
                 </>
               ) : (
                 <NextLink href="/login" passHref legacyBehavior>
                   <Link>
-                    <Typography component="span">Login</Typography>
+                    <Typography component="span">ورود</Typography>
                   </Link>
                 </NextLink>
               )}
@@ -242,7 +233,7 @@ function Layout({ title, description, children }: any) {
         </Grid>
         <Grid item sx={styles.footer} xs="auto">
           <footer>
-            <Typography>All rights reserved next store</Typography>
+            <Typography>تمامی حقوق برای تیم محفوظ می باشد</Typography>
           </footer>
         </Grid>
       </Grid>
