@@ -1,24 +1,18 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import NextLink from "next/link";
-import React, { useEffect, useContext, useReducer, useState } from "react";
-// import { getError } from "../../../utility/error";
+import React, { useEffect, useContext, useReducer } from "react";
 import { Store } from "../../../utility/Store";
 import Layout from "../../../components/layout";
 import { Controller, useForm } from "react-hook-form";
-import { useSnackbar } from "notistack";
 import {
   Grid,
   Card,
   List,
   ListItem,
-  ListItemText,
   Typography,
   CircularProgress,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Button,
 } from "@mui/material";
 
@@ -52,20 +46,20 @@ function reducer(state: any, action: any) {
   }
 }
 
-function UserEdit({ params }: any) {
-  const userId = params.id;
+function ProductEdit({ params }: any) {
+  const unitId = params.id;
   const { state } = useContext(Store);
-  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-  });
+  const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: "",
+    });
   const {
     handleSubmit,
     control,
     formState: { errors },
     setValue,
   } = useForm();
-  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   const { userInfo } = state;
 
@@ -76,48 +70,48 @@ function UserEdit({ params }: any) {
       const fetchData = async () => {
         try {
           dispatch({ type: "FETCH_REQUEST" });
-          const { data } = await axios.get(`/api/admin/users/${userId}`, {
+          const { data } = await axios.get(`/api/admin/units/${unitId}`, {
             headers: { authorization: `Bearer ${userInfo.token}` },
           });
-          setIsAdmin(data.isAdmin);
+          console.log("data", data);
           dispatch({ type: "FETCH_SUCCESS" });
+          setValue("code", data.code);
           setValue("name", data.name);
-          setValue("phone", data.phone);
-        } catch (err) {
-          // dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-        }
+          setValue("packingWeight", data.packingWeight);
+        } catch (err) {}
       };
       fetchData();
     }
   }, []);
 
-  const submitHandler = async ({ name, phone }: any) => {
+  const submitHandler = async ({ code, name, packingWeight }: any) => {
     try {
       dispatch({ type: "UPDATE_REQUEST" });
       await axios.put(
-        `/api/admin/users/${userId}`,
+        `/api/admin/units/${unitId}`,
         {
+          code,
           name,
-          isAdmin,
-          phone,
+          packingWeight,
         },
         { headers: { authorization: `Bearer ${userInfo.token}` } }
       );
       dispatch({ type: "UPDATE_SUCCESS" });
-      router.push("/admin/users");
-    } catch (err) {
+      router.push("/admin/units");
+    } catch (err: any) {
       // dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
     }
   };
+
   return (
-    <Layout title={`Edit User ${userId}`}>
+    <Layout title={`Edit Unit ${unitId}`}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Card>
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  ویرایش کاربر {userId}
+                  ویرایش واحد {unitId}
                 </Typography>
               </ListItem>
               <ListItem>
@@ -127,6 +121,27 @@ function UserEdit({ params }: any) {
               <ListItem>
                 <form onSubmit={handleSubmit(submitHandler)}>
                   <List>
+                    <ListItem>
+                      <Controller
+                        name="code"
+                        control={control}
+                        defaultValue=""
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field }) => (
+                          <TextField
+                            variant="outlined"
+                            fullWidth
+                            id="code"
+                            label="کد"
+                            error={Boolean(errors.code)}
+                            helperText={errors.code ? "code is required" : ""}
+                            {...field}
+                          ></TextField>
+                        )}
+                      ></Controller>
+                    </ListItem>
                     <ListItem>
                       <Controller
                         name="name"
@@ -142,9 +157,7 @@ function UserEdit({ params }: any) {
                             id="name"
                             label="نام"
                             error={Boolean(errors.name)}
-                            helperText={
-                              errors.name ? "وارد کردن نام ضروری است" : ""
-                            }
+                            helperText={errors.name ? "name is required" : ""}
                             {...field}
                           ></TextField>
                         )}
@@ -152,7 +165,7 @@ function UserEdit({ params }: any) {
                     </ListItem>
                     <ListItem>
                       <Controller
-                        name="phone"
+                        name="packingWeight"
                         control={control}
                         defaultValue=""
                         rules={{
@@ -162,29 +175,18 @@ function UserEdit({ params }: any) {
                           <TextField
                             variant="outlined"
                             fullWidth
-                            id="phone"
-                            label="موبایل"
-                            error={Boolean(errors.phone)}
+                            id="packingWeight"
+                            label="وزن بسته بندی به کیلوگرم"
+                            error={Boolean(errors.packingWeight)}
                             helperText={
-                              errors.phone ? "وارد کردن موبایل ضروری است" : ""
+                              errors.packingWeight ? "Price is required" : ""
                             }
                             {...field}
                           ></TextField>
                         )}
                       ></Controller>
                     </ListItem>
-                    {/* <ListItem>
-                      <FormControlLabel
-                        label="Is Admin"
-                        control={
-                          <Checkbox
-                            onClick={(e: any) => setIsAdmin(e.target.checked)}
-                            checked={isAdmin}
-                            name="isAdmin"
-                          />
-                        }
-                      ></FormControlLabel>
-                    </ListItem> */}
+
                     <ListItem>
                       <Button
                         variant="contained"
@@ -192,7 +194,7 @@ function UserEdit({ params }: any) {
                         fullWidth
                         color="primary"
                       >
-                        به روزرسانی
+                        بروزرسانی
                       </Button>
                       {loadingUpdate && <CircularProgress />}
                     </ListItem>
@@ -213,4 +215,4 @@ export async function getServerSideProps({ params }: any) {
   };
 }
 
-export default dynamic(() => Promise.resolve(UserEdit), { ssr: false });
+export default dynamic(() => Promise.resolve(ProductEdit), { ssr: false });

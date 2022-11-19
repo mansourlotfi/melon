@@ -20,6 +20,8 @@ import {
   ListItem,
   ListItemText,
   InputBase,
+  ListItemIcon,
+  Collapse,
 } from "@mui/material";
 import NextLink from "next/link";
 import * as styles from "./styles";
@@ -27,11 +29,75 @@ import { Store } from "../../utility/Store";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { Vazirmatn } from "@next/font/google";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Adminenu } from "./menu";
 
-const vazirMatn = Vazirmatn();
+const SingleLevel = ({ item }: any) => {
+  const router = useRouter();
+  return (
+    <NextLink href={item?.to ? item.to : ""} passHref legacyBehavior>
+      <ListItem selected={router.route === item?.to} button component="a">
+        {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+        <ListItemText primary={item.title} />
+      </ListItem>
+    </NextLink>
+  );
+};
+
+const MultiLevel = ({ item }: any) => {
+  const { items: children } = item;
+
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen((prev) => !prev);
+  };
+
+  return (
+    <React.Fragment>
+      <ListItem button onClick={handleClick}>
+        <ListItemIcon>{item.icon}</ListItemIcon>
+        <ListItemText primary={item.title} />
+        {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {children.map((child: any, key: any) => (
+            <DynamicMenuItem key={key} item={child} />
+          ))}
+        </List>
+      </Collapse>
+    </React.Fragment>
+  );
+};
+
+export function hasChildren(item: any) {
+  const { items: children } = item;
+
+  if (children === undefined) {
+    return false;
+  }
+
+  if (children.constructor !== Array) {
+    return false;
+  }
+
+  if (children.length === 0) {
+    return false;
+  }
+
+  return true;
+}
+
+const DynamicMenuItem = ({ item }: any) => {
+  console.log("item", item);
+
+  const Component = hasChildren(item) ? MultiLevel : SingleLevel;
+  return <Component item={item} />;
+};
 
 function Layout({ title, description, children }: any) {
   const router = useRouter();
@@ -86,11 +152,11 @@ function Layout({ title, description, children }: any) {
   };
 
   useEffect(() => {
-    fetchCategories();
+    // fetchCategories();
   }, []);
 
   return (
-    <div className={vazirMatn.className}>
+    <div>
       <Head>
         <title>{title ? `${title} - Melon` : "Melon"}</title>
         {description && <meta name="description" content={description}></meta>}
@@ -142,18 +208,13 @@ function Layout({ title, description, children }: any) {
                     </Grid>
                   </ListItem>
                   <Divider light />
+                  {userInfo?.isAdmin &&
+                    Adminenu.map((item, key): any => (
+                      <DynamicMenuItem key={key} item={item} />
+                    ))}
                   {userInfo?.isAdmin && (
                     <>
-                      <NextLink href="/admin/dashboard" passHref legacyBehavior>
-                        <ListItem
-                          selected={router.route === "/admin/dashboard"}
-                          button
-                          component="a"
-                        >
-                          <ListItemText primary="پنل ادمین"></ListItemText>
-                        </ListItem>
-                      </NextLink>
-                      <NextLink href="/admin/orders" passHref legacyBehavior>
+                      {/* <NextLink href="/admin/orders" passHref legacyBehavior>
                         <ListItem
                           selected={router.route === "/admin/orders"}
                           button
@@ -161,40 +222,7 @@ function Layout({ title, description, children }: any) {
                         >
                           <ListItemText primary="سفارشات"></ListItemText>
                         </ListItem>
-                      </NextLink>
-                      <NextLink href="/admin/products" passHref legacyBehavior>
-                        <ListItem
-                          selected={router.route === "/admin/products"}
-                          button
-                          component="a"
-                        >
-                          <ListItemText primary="محصولات"></ListItemText>
-                        </ListItem>
-                      </NextLink>
-                      <NextLink href="/admin/users" passHref legacyBehavior>
-                        <ListItem
-                          selected={router.route === "/admin/users"}
-                          button
-                          component="a"
-                        >
-                          <ListItemText primary="کاربران"></ListItemText>
-                        </ListItem>
-                      </NextLink>
-                      <NextLink
-                        href="/admin/user/register-brooker"
-                        passHref
-                        legacyBehavior
-                      >
-                        <ListItem
-                          selected={
-                            router.route === "/admin/user/register-brooker"
-                          }
-                          button
-                          component="a"
-                        >
-                          <ListItemText primary="فروشنده جدید"></ListItemText>
-                        </ListItem>
-                      </NextLink>
+                      </NextLink> */}
                     </>
                   )}
                 </List>

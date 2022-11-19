@@ -12,10 +12,10 @@ const Home: NextPageWithLayout = (props: any) => {
     <Grid container>
       <Grid container sx={styles.titleSection} position="relative">
         <Grid item xs={6} sx={{ textAlign: "center", alignSelf: "center" }}>
-          <Grid container>
+          <Grid container spacing={4}>
             <Grid item xs={12}>
               <Typography variant="h2" sx={{ color: "#fff" }}>
-                نرم افزار فروش ملون
+                نرم افزار بار فروشی و حق العمل کاری ملون
               </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -68,7 +68,7 @@ const Home: NextPageWithLayout = (props: any) => {
               alignSelf: "center",
             }}
           >
-            <Typography variant="h4" sx={{ color: "#ff5500" }}>
+            <Typography variant="h5" sx={{ color: "#ff5500" }}>
               در کمترین زمان فروشت رو بیشتر کن و هزینه هات رو کم کن
             </Typography>
           </Grid>
@@ -76,7 +76,7 @@ const Home: NextPageWithLayout = (props: any) => {
 
         <Grid container justifyContent="space-around" mb={2}>
           <Grid item xs={12} textAlign="center" pb={5}>
-            <Typography variant="h3" sx={{ color: "#ff5500" }}>
+            <Typography variant="h4" sx={{ color: "#ff5500" }}>
               امکانات نرم افزار ملون
             </Typography>
           </Grid>
@@ -87,7 +87,7 @@ const Home: NextPageWithLayout = (props: any) => {
 
         <Grid container justifyContent="space-around" mt={10} mb={2}>
           <Grid item xs={12} textAlign="center" pb={5}>
-            <Typography variant="h3" sx={{ color: "#ff5500" }}>
+            <Typography variant="h4" sx={{ color: "#ff5500" }}>
               مشتریان
             </Typography>
           </Grid>

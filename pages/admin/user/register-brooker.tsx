@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 // import useStyles from '../utility/styles';
 import Cookies from "js-cookie";
@@ -20,6 +20,7 @@ import {
 import { toast } from "react-toastify";
 import { Store } from "../../../utility/Store";
 import Layout from "../../../components/layout";
+import { LoadingButton } from "@mui/lab";
 
 export default function RegisterBrooker() {
   const {
@@ -31,6 +32,7 @@ export default function RegisterBrooker() {
   const { redirect } = router.query;
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
+  const [loading, setLoading] = useState(false);
   // const classes = useStyles();
   const submitHandler = async ({
     name,
@@ -44,13 +46,18 @@ export default function RegisterBrooker() {
       return toast.error("رمز ورود با تکرار آن مطابقت ندارد");
     }
     try {
-      const { data } = await axios.post("/api/admin/users/register-brooker", {
-        name,
-        email,
-        phone,
-        adminId: userInfo._id,
-        password,
-      });
+      setLoading(true);
+      const { data } = await axios
+        .post("/api/admin/users/register-brooker", {
+          name,
+          email,
+          phone,
+          adminId: userInfo._id,
+          password,
+        })
+        .finally(() => {
+          setLoading(false);
+        });
       // router.push(redirect?.toString() || "/admin/dashboard");
       router.push("/admin/users");
       toast.success("کاربر ایجاد شد");
@@ -65,7 +72,7 @@ export default function RegisterBrooker() {
         <Grid item lg={6} md={6} xs={12}>
           <form onSubmit={handleSubmit(submitHandler)}>
             <Typography component="h1" variant="h1">
-              ثبت نام
+              ثبت کاربر جدید
             </Typography>
             <List>
               <ListItem>
@@ -216,14 +223,15 @@ export default function RegisterBrooker() {
                 ></Controller>
               </ListItem>
               <ListItem>
-                <Button
+                <LoadingButton
                   variant="contained"
                   type="submit"
                   fullWidth
                   color="primary"
+                  loading={loading}
                 >
-                  ورود
-                </Button>
+                  ثبت
+                </LoadingButton>
               </ListItem>
             </List>
           </form>

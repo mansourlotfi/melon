@@ -11,18 +11,21 @@ import {
 } from "@mui/material";
 import NextLink from "next/link";
 import * as styles from "./styles";
-import { Vazirmatn } from "@next/font/google";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-const vazirMatn = Vazirmatn();
 
 function PublicLayout({ title, description, children }: any) {
   return (
-    <div className={vazirMatn.className}>
+    <div>
       <Head>
         <title>{title ? `${title} - Melon` : "Melon"}</title>
         {description && <meta name="description" content={description}></meta>}
       </Head>
-      <Grid container flexDirection="column" component={Paper}>
+      <Grid
+        container
+        flexDirection="column"
+        component={Paper}
+        sx={{ minHeight: "100vh" }}
+      >
         {/* <Grid item container>
           <AppBar position="static" sx={styles.navbar}>
             <Toolbar>
@@ -47,18 +50,21 @@ function PublicLayout({ title, description, children }: any) {
         >
           <Grid container pt={10}>
             <Grid item xs={4} textAlign="center">
-              <Typography>راه های ارتباطی ما</Typography>
-              <Typography>09113360715</Typography>
-              <Typography> info@me.com </Typography>
+              <Typography color={"#fff"}>راه های ارتباطی ما</Typography>
+              <Typography color={"#fff"}>09113360715</Typography>
+              <Typography color={"#fff"}> info@me.com </Typography>
             </Grid>
             <Grid item xs={4} textAlign="center">
-              <Typography>لینک های مهم</Typography>
-              <Typography> فروشگاه </Typography>
-              <Typography> ورود به سامانه</Typography>
-              <Typography> دریاره ما </Typography>
+              <Typography color={"#fff"}>لینک های مهم</Typography>
+              <Typography color={"#fff"}> فروشگاه </Typography>
+              <Typography color={"#fff"}> ورود به سامانه</Typography>
+              <Typography color={"#fff"}> دریاره ما </Typography>
             </Grid>
             <Grid item xs={4} textAlign="center">
-              <Typography> ما را در شبکه های مجازی دنبال کنید</Typography>
+              <Typography color={"#fff"}>
+                {" "}
+                ما را در شبکه های مجازی دنبال کنید
+              </Typography>
             </Grid>
           </Grid>
           <img

@@ -49,7 +49,6 @@ function AdminUsers() {
   const { state } = useContext(Store);
   const router = useRouter();
   const { userInfo } = state;
-  console.log("userInfo", userInfo);
 
   const [{ loading, error, users, successDelete, loadingDelete }, dispatch] =
     useReducer(reducer, {
@@ -71,6 +70,7 @@ function AdminUsers() {
             headers: { authorization: `Bearer ${userInfo.token}` },
           }
         );
+        console.log("data", data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {}
     };
@@ -121,6 +121,7 @@ function AdminUsers() {
                           <TableCell>کد</TableCell>
                           <TableCell>نام</TableCell>
                           <TableCell>ایمیل</TableCell>
+                          <TableCell>موبایل</TableCell>
                           <TableCell>ادمین</TableCell>
                           <TableCell>عملیات</TableCell>
                         </TableRow>
@@ -131,6 +132,7 @@ function AdminUsers() {
                             <TableCell>{user._id.substring(20, 24)}</TableCell>
                             <TableCell>{user.name}</TableCell>
                             <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.phone}</TableCell>
                             <TableCell>{user.isAdmin ? "YES" : "NO"}</TableCell>
                             <TableCell>
                               <NextLink

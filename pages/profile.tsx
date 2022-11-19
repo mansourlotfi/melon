@@ -63,28 +63,12 @@ function Profile() {
   return (
     <Layout title="Profile">
       <Grid container spacing={1}>
-        <Grid item md={3} xs={12}>
-          <Card>
-            <List>
-              <NextLink href="/profile" passHref legacyBehavior>
-                <ListItem selected button component="a">
-                  <ListItemText primary="User Profile"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/order-history" passHref legacyBehavior>
-                <ListItem button component="a">
-                  <ListItemText primary="Order History"></ListItemText>
-                </ListItem>
-              </NextLink>
-            </List>
-          </Card>
-        </Grid>
-        <Grid item md={9} xs={12}>
+        <Grid item xs={12}>
           <Card>
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  Profile
+                  پروفایل
                 </Typography>
               </ListItem>
               <ListItem>
@@ -104,7 +88,7 @@ function Profile() {
                             variant="outlined"
                             fullWidth
                             id="name"
-                            label="Name"
+                            label="نام"
                             inputProps={{ type: "name" }}
                             error={Boolean(errors.name)}
                             helperText={
@@ -133,7 +117,7 @@ function Profile() {
                             variant="outlined"
                             fullWidth
                             id="email"
-                            label="Email"
+                            label="ایمیل"
                             inputProps={{ type: "email" }}
                             error={Boolean(errors.email)}
                             helperText={
@@ -164,7 +148,7 @@ function Profile() {
                             variant="outlined"
                             fullWidth
                             id="password"
-                            label="Password"
+                            label="رمز عبور"
                             inputProps={{ type: "password" }}
                             error={Boolean(errors.password)}
                             helperText={
@@ -193,7 +177,7 @@ function Profile() {
                             variant="outlined"
                             fullWidth
                             id="confirmPassword"
-                            label="Confirm Password"
+                            label="تکرار رمز عبور"
                             inputProps={{ type: "password" }}
                             error={Boolean(errors.confirmPassword)}
                             helperText={
@@ -213,7 +197,7 @@ function Profile() {
                         fullWidth
                         color="primary"
                       >
-                        Update
+                        به روزرسانی
                       </Button>
                     </ListItem>
                   </List>

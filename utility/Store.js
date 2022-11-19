@@ -24,9 +24,9 @@ const initialState = {
       ? Cookies.get("paymentMethod")
       : "",
   },
-  userInfo: isJsonString(Cookies.get("userInfo")) || null,
-  // ? JSON.parse(Cookies.get("userInfo"))
-  // : null,
+  userInfo: isJsonString(Cookies.get("userInfo"))
+    ? JSON.parse(Cookies.get("userInfo"))
+    : null,
 };
 
 function reducer(state, action) {

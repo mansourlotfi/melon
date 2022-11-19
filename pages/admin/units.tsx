@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 import React, { useEffect, useContext, useReducer } from "react";
-// import { getError } from "../../utility/error";
 import { Store } from "../../utility/Store";
 import Layout from "../../components/layout";
 import {
@@ -28,7 +27,7 @@ function reducer(state: any, action: any) {
     case "FETCH_REQUEST":
       return { ...state, loading: true, error: "" };
     case "FETCH_SUCCESS":
-      return { ...state, loading: false, products: action.payload, error: "" };
+      return { ...state, loading: false, units: action.payload, error: "" };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     case "CREATE_REQUEST":
@@ -50,20 +49,20 @@ function reducer(state: any, action: any) {
   }
 }
 
-function AdminProdcuts() {
+function AdminUnits() {
   const { state } = useContext(Store);
   const router = useRouter();
   const { userInfo } = state;
 
   const [
-    { loading, error, products, loadingCreate, successDelete, loadingDelete },
+    { loading, error, units, loadingCreate, successDelete, loadingDelete },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
-    products: [],
+    units: [],
     error: "",
   });
-
+  console.log("units", units);
   useEffect(() => {
     if (!userInfo) {
       router.push("/login");
@@ -71,7 +70,7 @@ function AdminProdcuts() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/products`, {
+        const { data } = await axios.get(`/api/admin/units`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -86,32 +85,13 @@ function AdminProdcuts() {
     }
   }, [successDelete]);
 
-  const createHandler = async () => {
-    // if (!window.confirm("Are you sure?")) {
-    //   return;
-    // }
-    try {
-      dispatch({ type: "CREATE_REQUEST" });
-      const { data } = await axios.post(
-        `/api/admin/products`,
-        {},
-        {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({ type: "CREATE_SUCCESS" });
-      router.push(`/admin/product/${data.product._id}`);
-    } catch (err) {
-      dispatch({ type: "CREATE_FAIL" });
-    }
-  };
-  const deleteHandler = async (productId: any) => {
+  const deleteHandler = async (unitId: any) => {
     if (!window.confirm("Are you sure?")) {
       return;
     }
     try {
       dispatch({ type: "DELETE_REQUEST" });
-      await axios.delete(`/api/admin/products/${productId}`, {
+      await axios.delete(`/api/admin/units/${unitId}`, {
         headers: { authorization: `Bearer ${userInfo.token}` },
       });
       dispatch({ type: "DELETE_SUCCESS" });
@@ -129,19 +109,9 @@ function AdminProdcuts() {
                 <Grid container alignItems="center">
                   <Grid item xs={6}>
                     <Typography component="h1" variant="h1">
-                      میوه ها
+                      واحد های اندازه گیری
                     </Typography>
                     {loadingDelete && <CircularProgress />}
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      onClick={createHandler}
-                      color="primary"
-                      variant="contained"
-                    >
-                      Create
-                    </Button>
-                    {loadingCreate && <CircularProgress />}
                   </Grid>
                 </Grid>
               </ListItem>
@@ -158,23 +128,19 @@ function AdminProdcuts() {
                         <TableRow>
                           <TableCell>کد</TableCell>
                           <TableCell>نام</TableCell>
-                          <TableCell>واحد بسته بندی</TableCell>
                           <TableCell>وزن بسته بندی</TableCell>
                           <TableCell>عملیات</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {products.map((product: any) => (
-                          <TableRow key={product._id}>
-                            <TableCell>
-                              {product._id.substring(20, 24)}
-                            </TableCell>
-                            <TableCell>{product.name}</TableCell>
-                            <TableCell>${product.price}</TableCell>
-                            <TableCell>{product.category}</TableCell>
+                        {units.map((unit: any) => (
+                          <TableRow key={unit._id}>
+                            <TableCell>{unit._id.substring(20, 24)}</TableCell>
+                            <TableCell>{unit.name}</TableCell>
+                            <TableCell>{unit.packingWeight} کیلوگرم</TableCell>
                             <TableCell>
                               <NextLink
-                                href={`/admin/product/${product._id}`}
+                                href={`/admin/unit/${unit._id}`}
                                 passHref
                                 legacyBehavior
                               >
@@ -183,7 +149,7 @@ function AdminProdcuts() {
                                 </Button>
                               </NextLink>{" "}
                               <Button
-                                onClick={() => deleteHandler(product._id)}
+                                onClick={() => deleteHandler(unit._id)}
                                 size="small"
                                 variant="contained"
                               >
@@ -205,4 +171,4 @@ function AdminProdcuts() {
   );
 }
 
-export default dynamic(() => Promise.resolve(AdminProdcuts), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminUnits), { ssr: false });
