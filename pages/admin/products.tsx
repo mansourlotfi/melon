@@ -122,33 +122,7 @@ function AdminProdcuts() {
   return (
     <Layout title="Products">
       <Grid container spacing={1}>
-        <Grid item md={3} xs={12}>
-          <Card>
-            <List>
-              <NextLink href="/admin/dashboard" passHref legacyBehavior>
-                <ListItem button component="a">
-                  <ListItemText primary="Admin Dashboard"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/orders" passHref legacyBehavior>
-                <ListItem button component="a">
-                  <ListItemText primary="Orders"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/products" passHref legacyBehavior>
-                <ListItem selected button component="a">
-                  <ListItemText primary="Products"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/users" passHref legacyBehavior>
-                <ListItem button component="a">
-                  <ListItemText primary="Users"></ListItemText>
-                </ListItem>
-              </NextLink>
-            </List>
-          </Card>
-        </Grid>
-        <Grid item md={9} xs={12}>
+        <Grid item xs={12}>
           <Card>
             <List>
               <ListItem>

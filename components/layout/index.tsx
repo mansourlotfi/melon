@@ -145,22 +145,38 @@ function Layout({ title, description, children }: any) {
                   {userInfo?.isAdmin && (
                     <>
                       <NextLink href="/admin/dashboard" passHref legacyBehavior>
-                        <ListItem selected button component="a">
+                        <ListItem
+                          selected={router.route === "/admin/dashboard"}
+                          button
+                          component="a"
+                        >
                           <ListItemText primary="پنل ادمین"></ListItemText>
                         </ListItem>
                       </NextLink>
                       <NextLink href="/admin/orders" passHref legacyBehavior>
-                        <ListItem button component="a">
+                        <ListItem
+                          selected={router.route === "/admin/orders"}
+                          button
+                          component="a"
+                        >
                           <ListItemText primary="سفارشات"></ListItemText>
                         </ListItem>
                       </NextLink>
                       <NextLink href="/admin/products" passHref legacyBehavior>
-                        <ListItem button component="a">
+                        <ListItem
+                          selected={router.route === "/admin/products"}
+                          button
+                          component="a"
+                        >
                           <ListItemText primary="محصولات"></ListItemText>
                         </ListItem>
                       </NextLink>
                       <NextLink href="/admin/users" passHref legacyBehavior>
-                        <ListItem button component="a">
+                        <ListItem
+                          selected={router.route === "/admin/users"}
+                          button
+                          component="a"
+                        >
                           <ListItemText primary="کاربران"></ListItemText>
                         </ListItem>
                       </NextLink>
@@ -169,7 +185,13 @@ function Layout({ title, description, children }: any) {
                         passHref
                         legacyBehavior
                       >
-                        <ListItem button component="a">
+                        <ListItem
+                          selected={
+                            router.route === "/admin/user/register-brooker"
+                          }
+                          button
+                          component="a"
+                        >
                           <ListItemText primary="فروشنده جدید"></ListItemText>
                         </ListItem>
                       </NextLink>

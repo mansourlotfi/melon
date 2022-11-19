@@ -23,7 +23,7 @@ function PublicLayout({ title, description, children }: any) {
         {description && <meta name="description" content={description}></meta>}
       </Head>
       <Grid container flexDirection="column" component={Paper}>
-        <Grid item container>
+        {/* <Grid item container>
           <AppBar position="static" sx={styles.navbar}>
             <Toolbar>
               <Box display="flex" alignItems="center">
@@ -35,7 +35,7 @@ function PublicLayout({ title, description, children }: any) {
               </Box>
             </Toolbar>
           </AppBar>
-        </Grid>
+        </Grid> */}
         <Grid item container xs>
           {children}
         </Grid>
