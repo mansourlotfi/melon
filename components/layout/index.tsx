@@ -93,8 +93,6 @@ export function hasChildren(item: any) {
 }
 
 const DynamicMenuItem = ({ item }: any) => {
-  console.log("item", item);
-
   const Component = hasChildren(item) ? MultiLevel : SingleLevel;
   return <Component item={item} />;
 };

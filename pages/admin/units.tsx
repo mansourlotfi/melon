@@ -62,7 +62,6 @@ function AdminUnits() {
     units: [],
     error: "",
   });
-  console.log("units", units);
   useEffect(() => {
     if (!userInfo) {
       router.push("/login");

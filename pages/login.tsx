@@ -66,7 +66,6 @@ export default function Login() {
       Cookies.set("userInfo", data);
       router.push("/admin/dashboard");
     } catch (err: any) {
-      console.log("err.response", err.response);
       // enqueueSnackbar(getError(err), { variant: "error" });
       toast.error(err.response?.data?.message ?? "اشکالی وجود دارد");
     }

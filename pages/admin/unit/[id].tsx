@@ -73,7 +73,6 @@ function ProductEdit({ params }: any) {
           const { data } = await axios.get(`/api/admin/units/${unitId}`, {
             headers: { authorization: `Bearer ${userInfo.token}` },
           });
-          console.log("data", data);
           dispatch({ type: "FETCH_SUCCESS" });
           setValue("code", data.code);
           setValue("name", data.name);

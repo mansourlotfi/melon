@@ -70,7 +70,6 @@ function AdminUsers() {
             headers: { authorization: `Bearer ${userInfo.token}` },
           }
         );
-        console.log("data", data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {}
     };
