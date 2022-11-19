@@ -22,6 +22,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
+import Image from "next/image";
 
 function reducer(state: any, action: any) {
   switch (action.type) {
@@ -166,6 +167,7 @@ function AdminProdcuts() {
                           <TableCell>نام</TableCell>
                           <TableCell>واحد بسته بندی</TableCell>
                           <TableCell>وزن بسته بندی</TableCell>
+                          <TableCell>تصویر</TableCell>
                           <TableCell>عملیات</TableCell>
                         </TableRow>
                       </TableHead>
@@ -189,6 +191,16 @@ function AdminProdcuts() {
                               }
                               کیلوگرم
                             </TableCell>
+
+                            <TableCell>
+                              <Image
+                                src={product.image}
+                                alt="Picture of the product"
+                                width={100}
+                                height={100}
+                              />
+                            </TableCell>
+
                             <TableCell>
                               <NextLink
                                 href={`/admin/product/${product._id}`}

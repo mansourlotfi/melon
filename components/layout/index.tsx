@@ -193,7 +193,7 @@ function Layout({ title, description, children }: any) {
                       justifyContent="space-between"
                     >
                       <Grid item>
-                        <Typography>ملون</Typography>
+                        <Typography>بار فروشی و حق العمل کاری</Typography>
                       </Grid>
                       <Grid item>
                         <IconButton

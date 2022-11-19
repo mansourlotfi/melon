@@ -16,11 +16,10 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   await db.connect();
   const newProduct = new Product({
-    code: "sample name",
+    code: req.body.code,
     name: req.body.name,
     packingUnit: req.body.packingUnit,
-    packingWeight: req.body.packingWeight,
-    image: "/images/shirt1.jpg",
+    image: req.body.image,
   });
 
   const product = await newProduct.save();

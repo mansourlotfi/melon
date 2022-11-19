@@ -2,7 +2,7 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { getError } from "../utility/error";
 import { Store } from "../utility/Store";
 import Layout from "../components/layout";
@@ -18,6 +18,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
 function Profile() {
   const { state, dispatch } = useContext(Store);
@@ -29,6 +30,7 @@ function Profile() {
   } = useForm();
   const router = useRouter();
   const { userInfo } = state;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!userInfo) {
@@ -40,6 +42,7 @@ function Profile() {
   const submitHandler = async ({
     name,
     email,
+    phone,
     password,
     confirmPassword,
   }: any) => {
@@ -47,15 +50,21 @@ function Profile() {
       return;
     }
     try {
-      const { data } = await axios.put(
-        "/api/users/profile",
-        {
-          name,
-          email,
-          password,
-        },
-        { headers: { authorization: `Bearer ${userInfo.token}` } }
-      );
+      setLoading(true);
+      const { data } = await axios
+        .put(
+          "/api/users/profile",
+          {
+            name,
+            email,
+            phone,
+            password,
+          },
+          { headers: { authorization: `Bearer ${userInfo.token}` } }
+        )
+        .finally(() => {
+          setLoading(false);
+        });
       dispatch({ type: "USER_LOGIN", payload: data });
       Cookies.set("userInfo", data);
     } catch (err) {}
@@ -134,6 +143,29 @@ function Profile() {
                     </ListItem>
                     <ListItem>
                       <Controller
+                        name="phone"
+                        control={control}
+                        defaultValue=""
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field }) => (
+                          <TextField
+                            variant="outlined"
+                            fullWidth
+                            id="phone"
+                            label="موبایل"
+                            error={Boolean(errors.phone)}
+                            helperText={
+                              errors.phone ? "وارد کردن موبایل ضروری است" : ""
+                            }
+                            {...field}
+                          ></TextField>
+                        )}
+                      ></Controller>
+                    </ListItem>
+                    <ListItem>
+                      <Controller
                         name="password"
                         control={control}
                         defaultValue=""
@@ -191,14 +223,15 @@ function Profile() {
                       ></Controller>
                     </ListItem>
                     <ListItem>
-                      <Button
+                      <LoadingButton
                         variant="contained"
                         type="submit"
                         fullWidth
                         color="primary"
+                        loading={loading}
                       >
                         به روزرسانی
-                      </Button>
+                      </LoadingButton>
                     </ListItem>
                   </List>
                 </form>
