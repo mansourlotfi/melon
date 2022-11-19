@@ -26,7 +26,7 @@ export const Adminenu = [
       },
       {
         title: "تعریف میوه",
-        to: "/admin/products/add-product",
+        to: "/admin/product/add-product",
       },
       {
         title: "واحد هاي اندازه گیري",

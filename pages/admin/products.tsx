@@ -2,7 +2,7 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import React, { useEffect, useContext, useReducer } from "react";
+import React, { useEffect, useContext, useReducer, useState } from "react";
 // import { getError } from "../../utility/error";
 import { Store } from "../../utility/Store";
 import Layout from "../../components/layout";
@@ -54,6 +54,7 @@ function AdminProdcuts() {
   const { state } = useContext(Store);
   const router = useRouter();
   const { userInfo } = state;
+  const [units, setUnits] = useState([]);
 
   const [
     { loading, error, products, loadingCreate, successDelete, loadingDelete },
@@ -85,6 +86,21 @@ function AdminProdcuts() {
       fetchData();
     }
   }, [successDelete]);
+
+  useEffect(() => {
+    const fetchPackingUnits = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await axios.get(`/api/admin/units`, {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        });
+        setUnits(data);
+      } catch (err) {
+        // dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchPackingUnits();
+  }, []);
 
   const createHandler = async () => {
     // if (!window.confirm("Are you sure?")) {
@@ -133,16 +149,6 @@ function AdminProdcuts() {
                     </Typography>
                     {loadingDelete && <CircularProgress />}
                   </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      onClick={createHandler}
-                      color="primary"
-                      variant="contained"
-                    >
-                      Create
-                    </Button>
-                    {loadingCreate && <CircularProgress />}
-                  </Grid>
                 </Grid>
               </ListItem>
 
@@ -166,12 +172,23 @@ function AdminProdcuts() {
                       <TableBody>
                         {products.map((product: any) => (
                           <TableRow key={product._id}>
-                            <TableCell>
-                              {product._id.substring(20, 24)}
-                            </TableCell>
+                            <TableCell>{product.code}</TableCell>
                             <TableCell>{product.name}</TableCell>
-                            <TableCell>${product.price}</TableCell>
-                            <TableCell>{product.category}</TableCell>
+                            <TableCell>
+                              {
+                                units.find(
+                                  (item) => item._id === product?.packingUnit
+                                )?.name
+                              }
+                            </TableCell>
+                            <TableCell>
+                              {
+                                units.find(
+                                  (item) => item._id === product?.packingUnit
+                                )?.packingWeight
+                              }
+                              کیلوگرم
+                            </TableCell>
                             <TableCell>
                               <NextLink
                                 href={`/admin/product/${product._id}`}

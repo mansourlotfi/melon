@@ -1,6 +1,8 @@
 import nc from "next-connect";
 import { isAdmin, isAuth } from "../../../../../utility/auth";
 import Product from "../../../../../models/Product";
+import Unit from "../../../../../models/Unit";
+
 import db from "../../../../../utility/db";
 
 const handler = nc();
@@ -16,17 +18,13 @@ handler.get(async (req, res) => {
 handler.put(async (req, res) => {
   await db.connect();
   const product = await Product.findById(req.query.id);
+  // const unit = await Unit.findById(req.body.packingUnit).lean();
+
   if (product) {
+    product.code = req.body.code;
     product.name = req.body.name;
-    product.slug = req.body.slug;
-    product.price = req.body.price;
-    product.category = req.body.category;
+    product.packingUnit = req.body.packingUnit;
     product.image = req.body.image;
-    product.featuredImage = req.body.featuredImage;
-    product.isFeatured = req.body.isFeatured;
-    product.brand = req.body.brand;
-    product.countInStock = req.body.countInStock;
-    product.description = req.body.description;
     await product.save();
     await db.disconnect();
     res.send({ message: "Product Updated Successfully" });

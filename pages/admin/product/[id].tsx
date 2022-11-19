@@ -1,7 +1,6 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import NextLink from "next/link";
 import React, { useEffect, useContext, useReducer, useState } from "react";
 // import { getError } from "../../../utility/error";
 import { Store } from "../../../utility/Store";
@@ -12,13 +11,14 @@ import {
   Card,
   List,
   ListItem,
-  ListItemText,
   Typography,
   CircularProgress,
   TextField,
   Button,
-  FormControlLabel,
-  Checkbox,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 
 function reducer(state: any, action: any) {
@@ -54,6 +54,9 @@ function reducer(state: any, action: any) {
 function ProductEdit({ params }: any) {
   const productId = params.id;
   const { state } = useContext(Store);
+  const [units, setUnits] = useState([]);
+  const [selectedUnit, setSelectedUnit] = useState(null);
+
   const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
     useReducer(reducer, {
       loading: true,
@@ -68,31 +71,38 @@ function ProductEdit({ params }: any) {
   const router = useRouter();
   const { userInfo } = state;
 
+  const fetchData = async () => {
+    try {
+      dispatch({ type: "FETCH_REQUEST" });
+      const { data } = await axios.get(`/api/admin/products/${productId}`, {
+        headers: { authorization: `Bearer ${userInfo.token}` },
+      });
+      dispatch({ type: "FETCH_SUCCESS" });
+      setValue("code", data.code);
+      setValue("name", data.name);
+      setValue("packingUnit", data.packingUnit);
+      setValue("image", data.image);
+    } catch (err) {
+      // dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+    }
+  };
+  const fetchPackingUnits = async () => {
+    try {
+      dispatch({ type: "FETCH_REQUEST" });
+      const { data } = await axios.get(`/api/admin/units`, {
+        headers: { authorization: `Bearer ${userInfo.token}` },
+      });
+      setUnits(data);
+    } catch (err) {
+      // dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+    }
+  };
+
   useEffect(() => {
     if (!userInfo) {
       return router.push("/login");
     } else {
-      const fetchData = async () => {
-        try {
-          dispatch({ type: "FETCH_REQUEST" });
-          const { data } = await axios.get(`/api/admin/products/${productId}`, {
-            headers: { authorization: `Bearer ${userInfo.token}` },
-          });
-          dispatch({ type: "FETCH_SUCCESS" });
-          setValue("name", data.name);
-          setValue("slug", data.slug);
-          setValue("price", data.price);
-          setValue("image", data.image);
-          setValue("featuredImage", data.featuredImage);
-          setIsFeatured(data.isFeatured);
-          setValue("category", data.category);
-          setValue("brand", data.brand);
-          setValue("countInStock", data.countInStock);
-          setValue("description", data.description);
-        } catch (err) {
-          // dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-        }
-      };
+      fetchPackingUnits();
       fetchData();
     }
   }, []);
@@ -116,32 +126,16 @@ function ProductEdit({ params }: any) {
     }
   };
 
-  const submitHandler = async ({
-    name,
-    slug,
-    price,
-    category,
-    image,
-    featuredImage,
-    brand,
-    countInStock,
-    description,
-  }: any) => {
+  const submitHandler = async ({ code, name, image }: any) => {
     try {
       dispatch({ type: "UPDATE_REQUEST" });
       await axios.put(
         `/api/admin/products/${productId}`,
         {
+          code,
           name,
-          slug,
-          price,
-          category,
+          packingUnit: selectedUnit,
           image,
-          isFeatured,
-          featuredImage,
-          brand,
-          countInStock,
-          description,
         },
         { headers: { authorization: `Bearer ${userInfo.token}` } }
       );
@@ -152,8 +146,6 @@ function ProductEdit({ params }: any) {
     }
   };
 
-  const [isFeatured, setIsFeatured] = useState(false);
-
   return (
     <Layout title={`Edit Product ${productId}`}>
       <Grid container spacing={1}>
@@ -162,7 +154,7 @@ function ProductEdit({ params }: any) {
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  Edit Product {productId}
+                  ویرایش محصول {productId}
                 </Typography>
               </ListItem>
               <ListItem>
@@ -172,6 +164,27 @@ function ProductEdit({ params }: any) {
               <ListItem>
                 <form onSubmit={handleSubmit(submitHandler)}>
                   <List>
+                    <ListItem>
+                      <Controller
+                        name="code"
+                        control={control}
+                        defaultValue=""
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field }) => (
+                          <TextField
+                            variant="outlined"
+                            fullWidth
+                            id="code"
+                            label="کد"
+                            error={Boolean(errors.code)}
+                            helperText={errors.code ? "code is required" : ""}
+                            {...field}
+                          ></TextField>
+                        )}
+                      ></Controller>
+                    </ListItem>
                     <ListItem>
                       <Controller
                         name="name"
@@ -185,55 +198,38 @@ function ProductEdit({ params }: any) {
                             variant="outlined"
                             fullWidth
                             id="name"
-                            label="Name"
+                            label="نام"
                             error={Boolean(errors.name)}
-                            helperText={errors.name ? "Name is required" : ""}
+                            helperText={errors.name ? "name is required" : ""}
                             {...field}
                           ></TextField>
                         )}
                       ></Controller>
                     </ListItem>
                     <ListItem>
-                      <Controller
-                        name="slug"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            variant="outlined"
-                            fullWidth
-                            id="slug"
-                            label="Slug"
-                            error={Boolean(errors.slug)}
-                            helperText={errors.slug ? "Slug is required" : ""}
-                            {...field}
-                          ></TextField>
-                        )}
-                      ></Controller>
-                    </ListItem>
-                    <ListItem>
-                      <Controller
-                        name="price"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            variant="outlined"
-                            fullWidth
-                            id="price"
-                            label="Price"
-                            error={Boolean(errors.price)}
-                            helperText={errors.price ? "Price is required" : ""}
-                            {...field}
-                          ></TextField>
-                        )}
-                      ></Controller>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          واحد بسته بندی
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="packingUnit"
+                          name="packingUnit"
+                          value={units.find(
+                            (unit) => unit._id === selectedUnit
+                          )}
+                          label="واحد بسته بندی"
+                          onChange={(e) => setSelectedUnit(e.target.value)}
+                          required
+                        >
+                          {units.map((unit: any) => (
+                            <MenuItem key={unit._id} value={unit._id}>
+                              {unit.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      {/* value={brand} onChange={brandHandler} */}
                     </ListItem>
                     <ListItem>
                       <Controller
@@ -248,7 +244,7 @@ function ProductEdit({ params }: any) {
                             variant="outlined"
                             fullWidth
                             id="image"
-                            label="Image"
+                            label="تصویر"
                             error={Boolean(errors.image)}
                             helperText={errors.image ? "Image is required" : ""}
                             {...field}
@@ -258,155 +254,10 @@ function ProductEdit({ params }: any) {
                     </ListItem>
                     <ListItem>
                       <Button variant="contained" component="label">
-                        Upload File
+                        آپلود عکس
                         <input type="file" onChange={uploadHandler} hidden />
                       </Button>
                       {loadingUpload && <CircularProgress />}
-                    </ListItem>
-                    <ListItem>
-                      <FormControlLabel
-                        label="Is Featured"
-                        control={
-                          <Checkbox
-                            onClick={(e: any) =>
-                              setIsFeatured(e.target.checked)
-                            }
-                            checked={isFeatured}
-                            name="isFeatured"
-                          />
-                        }
-                      ></FormControlLabel>
-                    </ListItem>
-                    <ListItem>
-                      <Controller
-                        name="featuredImage"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            variant="outlined"
-                            fullWidth
-                            id="featuredImage"
-                            label="Featured Image"
-                            error={Boolean(errors.featuredImage)}
-                            helperText={
-                              errors.featuredImage
-                                ? "Featured Image is required"
-                                : ""
-                            }
-                            {...field}
-                          ></TextField>
-                        )}
-                      ></Controller>
-                    </ListItem>
-                    <ListItem>
-                      <Button variant="contained" component="label">
-                        Upload File
-                        <input
-                          type="file"
-                          onChange={(e) => uploadHandler(e, "featuredImage")}
-                          hidden
-                        />
-                      </Button>
-                      {loadingUpload && <CircularProgress />}
-                    </ListItem>
-                    <ListItem>
-                      <Controller
-                        name="category"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            variant="outlined"
-                            fullWidth
-                            id="category"
-                            label="Category"
-                            error={Boolean(errors.category)}
-                            helperText={
-                              errors.category ? "Category is required" : ""
-                            }
-                            {...field}
-                          ></TextField>
-                        )}
-                      ></Controller>
-                    </ListItem>
-                    <ListItem>
-                      <Controller
-                        name="brand"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            variant="outlined"
-                            fullWidth
-                            id="brand"
-                            label="Brand"
-                            error={Boolean(errors.brand)}
-                            helperText={errors.brand ? "Brand is required" : ""}
-                            {...field}
-                          ></TextField>
-                        )}
-                      ></Controller>
-                    </ListItem>
-                    <ListItem>
-                      <Controller
-                        name="countInStock"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            variant="outlined"
-                            fullWidth
-                            id="countInStock"
-                            label="Count in stock"
-                            error={Boolean(errors.countInStock)}
-                            helperText={
-                              errors.countInStock
-                                ? "Count in stock is required"
-                                : ""
-                            }
-                            {...field}
-                          ></TextField>
-                        )}
-                      ></Controller>
-                    </ListItem>
-                    <ListItem>
-                      <Controller
-                        name="description"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            variant="outlined"
-                            fullWidth
-                            multiline
-                            id="description"
-                            label="Description"
-                            error={Boolean(errors.description)}
-                            helperText={
-                              errors.description
-                                ? "Description is required"
-                                : ""
-                            }
-                            {...field}
-                          ></TextField>
-                        )}
-                      ></Controller>
                     </ListItem>
 
                     <ListItem>
@@ -416,7 +267,7 @@ function ProductEdit({ params }: any) {
                         fullWidth
                         color="primary"
                       >
-                        Update
+                        بهروزرسانی
                       </Button>
                       {loadingUpdate && <CircularProgress />}
                     </ListItem>
