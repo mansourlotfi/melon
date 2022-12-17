@@ -17,7 +17,7 @@ export const Adminenu = [
         to: "/admin/users",
       },
       {
-        title: "تعریف کاربر",
+        title: "تعریف فروشنده جدید",
         to: "/admin/user/register-brooker",
       },
       {
@@ -25,7 +25,7 @@ export const Adminenu = [
         to: "/admin/products",
       },
       {
-        title: "تعریف میوه",
+        title: "تعریف میوه جدید",
         to: "/admin/product/add-product",
       },
       {
@@ -35,6 +35,10 @@ export const Adminenu = [
       {
         title: "تعریف واحد اندازه گیري",
         to: "/admin/unit/add-unit",
+      },
+      {
+        title: "درخت حساب",
+        to: "/admin/accountsTree",
       },
     ],
   },

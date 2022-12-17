@@ -135,141 +135,143 @@ function AddProduct() {
   return (
     <Layout title={`Add Product `}>
       <Grid container spacing={1} justifyContent="center">
-        <Grid item lg={6} md={6} xs={12}>
-          <List>
-            <ListItem>
-              <Typography component="h1" variant="h1">
-                افزودن محصول جدید
-              </Typography>
-            </ListItem>
+        <Grid item lg={6} md={6} xs={12} mt={5}>
+          <Card>
+            <List>
+              <ListItem>
+                <Typography component="h1" variant="h1">
+                  افزودن محصول جدید
+                </Typography>
+              </ListItem>
 
-            <form onSubmit={handleSubmit(submitHandler)}>
-              <List>
-                <ListItem>
-                  <Controller
-                    name="code"
-                    control={control}
-                    defaultValue=""
-                    rules={{
-                      required: true,
-                    }}
-                    render={({ field }) => (
-                      <TextField
-                        variant="outlined"
-                        fullWidth
-                        id="code"
-                        label="کد"
-                        error={Boolean(errors.code)}
-                        helperText={errors.code ? "code is required" : ""}
-                        {...field}
-                      ></TextField>
-                    )}
-                  ></Controller>
-                </ListItem>
-                <ListItem>
-                  <Controller
-                    name="name"
-                    control={control}
-                    defaultValue=""
-                    rules={{
-                      required: true,
-                    }}
-                    render={({ field }) => (
-                      <TextField
-                        variant="outlined"
-                        fullWidth
-                        id="name"
-                        label="نام"
-                        error={Boolean(errors.name)}
-                        helperText={errors.name ? "name is required" : ""}
-                        {...field}
-                      ></TextField>
-                    )}
-                  ></Controller>
-                </ListItem>
-                <ListItem>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      واحد بسته بندی
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="packingUnit"
-                      name="packingUnit"
-                      value={units.find((unit) => unit._id === selectedUnit)}
-                      label="واحد بسته بندی"
-                      onChange={(e) => setSelectedUnit(e.target.value)}
-                      required
-                    >
-                      {units.map((unit: any) => (
-                        <MenuItem key={unit._id} value={unit._id}>
-                          {unit.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  {/* value={brand} onChange={brandHandler} */}
-                </ListItem>
-                <ListItem>
-                  <Controller
-                    name="image"
-                    control={control}
-                    defaultValue=""
-                    rules={{
-                      required: true,
-                    }}
-                    render={({ field }) => (
-                      <TextField
-                        variant="outlined"
-                        fullWidth
-                        id="image"
-                        label="تصویر"
-                        error={Boolean(errors.image)}
-                        helperText={errors.image ? "Image is required" : ""}
-                        {...field}
-                      ></TextField>
-                    )}
-                  ></Controller>
-                </ListItem>
-                <ListItem>
-                  <Grid container justifyContent="space-between">
-                    <Grid item alignSelf="center">
-                      <LoadingButton
-                        loading={loadingUpload}
-                        variant="contained"
-                        component="label"
-                      >
-                        آپلود عکس
-                        <input type="file" onChange={uploadHandler} hidden />
-                      </LoadingButton>
-                    </Grid>
-                    <Grid item>
-                      {imageUrl && (
-                        <Image
-                          src={imageUrl}
-                          alt="Picture of the author"
-                          width={200}
-                          height={200}
-                        />
+              <form onSubmit={handleSubmit(submitHandler)}>
+                <List>
+                  <ListItem>
+                    <Controller
+                      name="code"
+                      control={control}
+                      defaultValue=""
+                      rules={{
+                        required: true,
+                      }}
+                      render={({ field }) => (
+                        <TextField
+                          variant="outlined"
+                          fullWidth
+                          id="code"
+                          label="کد"
+                          error={Boolean(errors.code)}
+                          helperText={errors.code ? "code is required" : ""}
+                          {...field}
+                        ></TextField>
                       )}
+                    ></Controller>
+                  </ListItem>
+                  <ListItem>
+                    <Controller
+                      name="name"
+                      control={control}
+                      defaultValue=""
+                      rules={{
+                        required: true,
+                      }}
+                      render={({ field }) => (
+                        <TextField
+                          variant="outlined"
+                          fullWidth
+                          id="name"
+                          label="نام"
+                          error={Boolean(errors.name)}
+                          helperText={errors.name ? "name is required" : ""}
+                          {...field}
+                        ></TextField>
+                      )}
+                    ></Controller>
+                  </ListItem>
+                  <ListItem>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        واحد بسته بندی
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="packingUnit"
+                        name="packingUnit"
+                        value={units.find((unit) => unit._id === selectedUnit)}
+                        label="واحد بسته بندی"
+                        onChange={(e) => setSelectedUnit(e.target.value)}
+                        required
+                      >
+                        {units.map((unit: any) => (
+                          <MenuItem key={unit._id} value={unit._id}>
+                            {unit.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    {/* value={brand} onChange={brandHandler} */}
+                  </ListItem>
+                  <ListItem>
+                    <Controller
+                      name="image"
+                      control={control}
+                      defaultValue=""
+                      rules={{
+                        required: true,
+                      }}
+                      render={({ field }) => (
+                        <TextField
+                          variant="outlined"
+                          fullWidth
+                          id="image"
+                          label="تصویر"
+                          error={Boolean(errors.image)}
+                          helperText={errors.image ? "Image is required" : ""}
+                          {...field}
+                        ></TextField>
+                      )}
+                    ></Controller>
+                  </ListItem>
+                  <ListItem>
+                    <Grid container justifyContent="space-between">
+                      <Grid item alignSelf="center">
+                        <LoadingButton
+                          loading={loadingUpload}
+                          variant="contained"
+                          component="label"
+                        >
+                          آپلود عکس
+                          <input type="file" onChange={uploadHandler} hidden />
+                        </LoadingButton>
+                      </Grid>
+                      <Grid item>
+                        {imageUrl && (
+                          <Image
+                            src={imageUrl}
+                            alt="Picture of the author"
+                            width={200}
+                            height={200}
+                          />
+                        )}
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </ListItem>
+                  </ListItem>
 
-                <ListItem>
-                  <LoadingButton
-                    variant="contained"
-                    type="submit"
-                    fullWidth
-                    loading={loadingUpload}
-                    color="primary"
-                  >
-                    بهروزرسانی
-                  </LoadingButton>
-                </ListItem>
-              </List>
-            </form>
-          </List>
+                  <ListItem>
+                    <LoadingButton
+                      variant="contained"
+                      type="submit"
+                      fullWidth
+                      loading={loadingUpload}
+                      color="primary"
+                    >
+                      بهروزرسانی
+                    </LoadingButton>
+                  </ListItem>
+                </List>
+              </form>
+            </List>
+          </Card>
         </Grid>
       </Grid>
     </Layout>

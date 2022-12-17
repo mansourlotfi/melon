@@ -2,7 +2,14 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Typography, List, ListItem, TextField, Grid } from "@mui/material";
+import {
+  Typography,
+  List,
+  ListItem,
+  TextField,
+  Grid,
+  Card,
+} from "@mui/material";
 import { toast } from "react-toastify";
 import { Store } from "../../../utility/Store";
 import Layout from "../../../components/layout";
@@ -49,114 +56,116 @@ export default function RegisterBrooker() {
   return (
     <Layout title="Register">
       <Grid container justifyContent="center">
-        <Grid item lg={6} md={6} xs={12}>
-          <form onSubmit={handleSubmit(submitHandler)}>
-            <Typography component="h1" variant="h1">
-              ثبت واحد جدید
-            </Typography>
-            <List>
-              <ListItem>
-                <Controller
-                  name="code"
-                  control={control}
-                  defaultValue=""
-                  rules={{
-                    required: true,
-                    // minLength: 2,
-                  }}
-                  render={({ field }: any) => (
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      id="code"
-                      label="کد"
-                      inputProps={{ type: "code" }}
-                      error={Boolean(errors.code)}
-                      helperText={
-                        errors.code
-                          ? errors.code.type === "minLength"
-                            ? "code length is more than 1"
-                            : "code is required"
-                          : ""
-                      }
-                      {...field}
-                    ></TextField>
-                  )}
-                ></Controller>
-              </ListItem>
+        <Grid item lg={6} md={6} xs={12} mt={5}>
+          <Card>
+            <form onSubmit={handleSubmit(submitHandler)}>
+              <Typography component="h1" variant="h1">
+                ثبت واحد جدید
+              </Typography>
+              <List>
+                <ListItem>
+                  <Controller
+                    name="code"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: true,
+                      // minLength: 2,
+                    }}
+                    render={({ field }: any) => (
+                      <TextField
+                        variant="outlined"
+                        fullWidth
+                        id="code"
+                        label="کد"
+                        inputProps={{ type: "code" }}
+                        error={Boolean(errors.code)}
+                        helperText={
+                          errors.code
+                            ? errors.code.type === "minLength"
+                              ? "code length is more than 1"
+                              : "code is required"
+                            : ""
+                        }
+                        {...field}
+                      ></TextField>
+                    )}
+                  ></Controller>
+                </ListItem>
 
-              <ListItem>
-                <Controller
-                  name="name"
-                  control={control}
-                  defaultValue=""
-                  rules={{
-                    required: true,
-                    // pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                  }}
-                  render={({ field }: any) => (
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      id="name"
-                      label="نام"
-                      inputProps={{ type: "name" }}
-                      error={Boolean(errors.name)}
-                      helperText={
-                        errors.name
-                          ? errors.name.type === "pattern"
-                            ? "name is not valid"
-                            : "name is required"
-                          : ""
-                      }
-                      {...field}
-                    ></TextField>
-                  )}
-                ></Controller>
-              </ListItem>
-              <ListItem>
-                <Controller
-                  name="packingWeight"
-                  control={control}
-                  defaultValue=""
-                  rules={{
-                    required: true,
-                    // minLength: 11,
-                    // maxLength: 11,
-                  }}
-                  render={({ field }: any) => (
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      id="packingWeight"
-                      label="وزن بسته بندی به کیلوگرم"
-                      inputProps={{ type: "packingWeight" }}
-                      error={Boolean(errors.packingWeight)}
-                      helperText={
-                        errors.name
-                          ? errors.name.type === "minLength"
-                            ? "packingWeight length is 1"
-                            : "packingWeight is required"
-                          : ""
-                      }
-                      {...field}
-                    ></TextField>
-                  )}
-                ></Controller>
-              </ListItem>
-              <ListItem>
-                <LoadingButton
-                  variant="contained"
-                  type="submit"
-                  fullWidth
-                  color="primary"
-                  loading={loading}
-                >
-                  ثبت
-                </LoadingButton>
-              </ListItem>
-            </List>
-          </form>
+                <ListItem>
+                  <Controller
+                    name="name"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: true,
+                      // pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                    }}
+                    render={({ field }: any) => (
+                      <TextField
+                        variant="outlined"
+                        fullWidth
+                        id="name"
+                        label="نام"
+                        inputProps={{ type: "name" }}
+                        error={Boolean(errors.name)}
+                        helperText={
+                          errors.name
+                            ? errors.name.type === "pattern"
+                              ? "name is not valid"
+                              : "name is required"
+                            : ""
+                        }
+                        {...field}
+                      ></TextField>
+                    )}
+                  ></Controller>
+                </ListItem>
+                <ListItem>
+                  <Controller
+                    name="packingWeight"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: true,
+                      // minLength: 11,
+                      // maxLength: 11,
+                    }}
+                    render={({ field }: any) => (
+                      <TextField
+                        variant="outlined"
+                        fullWidth
+                        id="packingWeight"
+                        label="وزن بسته بندی به کیلوگرم"
+                        inputProps={{ type: "packingWeight" }}
+                        error={Boolean(errors.packingWeight)}
+                        helperText={
+                          errors.name
+                            ? errors.name.type === "minLength"
+                              ? "packingWeight length is 1"
+                              : "packingWeight is required"
+                            : ""
+                        }
+                        {...field}
+                      ></TextField>
+                    )}
+                  ></Controller>
+                </ListItem>
+                <ListItem>
+                  <LoadingButton
+                    variant="contained"
+                    type="submit"
+                    fullWidth
+                    color="primary"
+                    loading={loading}
+                  >
+                    ثبت
+                  </LoadingButton>
+                </ListItem>
+              </List>
+            </form>
+          </Card>
         </Grid>
       </Grid>
     </Layout>

@@ -139,7 +139,7 @@ function AdminProdcuts() {
   return (
     <Layout title="Products">
       <Grid container spacing={1}>
-        <Grid item xs={12}>
+        <Grid item xs={12} mt={5}>
           <Card>
             <List>
               <ListItem>
@@ -210,7 +210,7 @@ function AdminProdcuts() {
                                 <Button size="small" variant="contained">
                                   ویرایش
                                 </Button>
-                              </NextLink>{" "}
+                              </NextLink>
                               <Button
                                 onClick={() => deleteHandler(product._id)}
                                 size="small"
