@@ -1,5 +1,6 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import DatasetIcon from "@mui/icons-material/Dataset";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 
 export const Adminenu = [
   {
@@ -9,7 +10,7 @@ export const Adminenu = [
     items: [],
   },
   {
-    icon: <PeopleAltIcon />,
+    icon: <DatasetIcon />,
     title: "اطلاعات پایه",
     items: [
       {
@@ -39,6 +40,28 @@ export const Adminenu = [
       {
         title: "درخت حساب",
         to: "/admin/accountsTree",
+      },
+      {
+        title: "نوع حساب",
+        to: "/admin/contactType",
+      },
+      {
+        title: "تعریف طرف حساب",
+        to: "/admin/contacts/createContact",
+      },
+      {
+        title: "طرف حساب ها",
+        to: "/admin/contacts",
+      },
+    ],
+  },
+  {
+    icon: <ReceiptLongIcon />,
+    title: "عملیات",
+    items: [
+      {
+        title: "کاربران",
+        to: "/admin/users",
       },
     ],
   },
