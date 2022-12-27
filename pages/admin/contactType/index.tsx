@@ -229,15 +229,6 @@ function Index() {
                             <TableCell>{type.typeName}</TableCell>
 
                             <TableCell>
-                              {/* <NextLink
-                                href={`/admin/type/${type._id}`}
-                                passHref
-                                legacyBehavior
-                              >
-                                <Button size="small" variant="contained">
-                                  ویرایش
-                                </Button>
-                              </NextLink> */}
                               <Button
                                 onClick={() => deleteHandler(type._id)}
                                 size="small"

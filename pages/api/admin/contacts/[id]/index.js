@@ -1,7 +1,6 @@
 import nc from "next-connect";
 import { isAdmin, isAuth } from "../../../../../utility/auth";
-import Product from "../../../../../models/Product";
-import Unit from "../../../../../models/Unit";
+import Contact from "../../../../../models/Contact";
 
 import db from "../../../../../utility/db";
 
@@ -10,40 +9,40 @@ handler.use(isAuth, isAdmin);
 
 handler.get(async (req, res) => {
   await db.connect();
-  const product = await Product.findById(req.query.id);
+  const contact = await Contact.findById(req.query.id);
   await db.disconnect();
-  res.send(product);
+  res.send(contact);
 });
 
 handler.put(async (req, res) => {
   await db.connect();
-  const product = await Product.findById(req.query.id);
+  const contact = await Contact.findById(req.query.id);
   // const unit = await Unit.findById(req.body.packingUnit).lean();
 
-  if (product) {
-    product.code = req.body.code;
-    product.name = req.body.name;
-    product.packingUnit = req.body.packingUnit;
-    product.image = req.body.image;
-    await product.save();
+  if (contact) {
+    contact.code = req.body.code;
+    contact.name = req.body.name;
+    contact.packingUnit = req.body.packingUnit;
+    contact.image = req.body.image;
+    await contact.save();
     await db.disconnect();
-    res.send({ message: "Product Updated Successfully" });
+    res.send({ message: "Contact Updated Successfully" });
   } else {
     await db.disconnect();
-    res.status(404).send({ message: "Product Not Found" });
+    res.status(404).send({ message: "Contact Not Found" });
   }
 });
 
 handler.delete(async (req, res) => {
   await db.connect();
-  const product = await Product.findById(req.query.id);
-  if (product) {
-    await product.remove();
+  const contact = await Contact.findById(req.query.id);
+  if (contact) {
+    await contact.remove();
     await db.disconnect();
-    res.send({ message: "Product Deleted" });
+    res.send({ message: "Contact Deleted" });
   } else {
     await db.disconnect();
-    res.status(404).send({ message: "Product Not Found" });
+    res.status(404).send({ message: "Contact Not Found" });
   }
 });
 

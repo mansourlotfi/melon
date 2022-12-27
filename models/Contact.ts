@@ -9,7 +9,7 @@ const contactSchema = new mongoose.Schema(
     address: { type: String, required: false },
     credit: { type: String, required: false },
     contactType: {
-      typeName: { type: String },
+      typeName: { type: mongoose.Schema.Types.ObjectId, ref: "ContactTypes" },
     },
   },
   {

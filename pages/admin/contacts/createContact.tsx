@@ -70,6 +70,7 @@ function AddContact() {
     control,
     formState: { errors },
     setValue,
+    reset,
   } = useForm();
   const router = useRouter();
   const { userInfo } = state;
@@ -121,6 +122,8 @@ function AddContact() {
         { headers: { authorization: `Bearer ${userInfo.token}` } }
       );
       dispatch({ type: "UPDATE_SUCCESS" });
+      toast.success("طرف حساب ثبت شد");
+      reset();
     } catch (err: any) {
       dispatch({ type: "UPDATE_FAIL" });
       toast.error(err.response?.data);
@@ -291,7 +294,6 @@ function AddContact() {
                         value={contactType}
                         label="نوع حساب"
                         onChange={handleChange}
-                        required
                         multiple
                         renderValue={(selected) =>
                           selected.map((S) => S.typeName).join(", ")
