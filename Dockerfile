@@ -13,7 +13,7 @@ RUN yarn build
 # Bundle static assets with nginx
 FROM nginx:1.21.0-alpine as production
 
-COPY conf /etc/nginx
+COPY nginx.conf /etc/nginx
 
 # Static build
 COPY --from=builder /app/build /usr/share/nginx/html/
