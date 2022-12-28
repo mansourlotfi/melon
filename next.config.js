@@ -10,10 +10,7 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  resolve: {
-    extensions: [".js", ".jsx"],
-  },
-  distDir: "build",
+  // distDir: "build",
 };
 
 module.exports = nextConfig;
