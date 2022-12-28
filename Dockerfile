@@ -27,7 +27,7 @@ WORKDIR /usr/share/nginx/html
 COPY .env .
 
 # Make our shell script executable
-RUN chmod +x env.sh
+# RUN chmod +x env.sh
 
 # Start Nginx server
 # CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
