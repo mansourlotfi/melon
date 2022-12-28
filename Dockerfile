@@ -13,7 +13,7 @@ RUN yarn next build
 # Bundle static assets with nginx
 FROM nginx:1.21.0-alpine as production
 
-COPY nginx.conf /etc/nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Static build
 COPY --from=builder /app/build /usr/share/nginx/html/
@@ -32,3 +32,4 @@ COPY .env .
 # Start Nginx server
 # CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
 CMD ["nginx", "-g", "daemon off;"]
+
