@@ -10,6 +10,9 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
 };
 
 module.exports = nextConfig;
