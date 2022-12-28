@@ -1,10 +1,10 @@
 // /api/products/:id/reviews
 import mongoose from "mongoose";
 import nextConnect from "next-connect";
-import { onError } from "../../../../utility/error";
-import db from "../../../../utility/db";
-import Product from "../../../../models/Product";
-import { isAuth } from "../../../../utility/auth";
+import { onError } from "../../../../../utility/error";
+import db from "../../../../../utility/db";
+import Product from "../../../../../models/Product";
+import { isAuth } from "../../../../../utility/auth";
 
 const handler = nextConnect({
   onError,
