@@ -13,6 +13,7 @@ const nextConfig = {
   resolve: {
     extensions: [".js", ".jsx"],
   },
+  distDir: "build",
 };
 
 module.exports = nextConfig;
