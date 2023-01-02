@@ -13,7 +13,7 @@ handler.get(async (req, res) => {
   // await Product.insertMany(data.products);
 
   await db.disconnect();
-  return res.send({ message: "Seeded successfully" });
+  res.send({ message: "Seeded successfully" });
 });
 
 export default handler;
