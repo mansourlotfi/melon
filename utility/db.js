@@ -15,13 +15,16 @@ async function connect() {
     }
     await mongoose.disconnect();
   }
-  const db = await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    // useCreateIndex: true,
-  });
-  console.log("new connection");
-  connection.isConnected = db.connections[0].readyState;
+  const db = await mongoose
+    .connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      // useCreateIndex: true,
+    })
+    .then(() => {
+      console.log("new connection");
+      connection.isConnected = db.connections[0].readyState;
+    });
 }
 
 async function disconnect() {
