@@ -11,21 +11,23 @@ COPY . .
 RUN yarn next build
 
 # Bundle static assets with nginx
-FROM nginx:1.21.0-alpine as production
+# FROM nginx:1.21.0-alpine as production
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Static build
-COPY --from=builder /app/.next /usr/share/nginx/html/
+# COPY --from=builder /app/.next /usr/share/nginx/html/
 
 # Default port exposure
 EXPOSE 80
 
 # Copy .env file and shell script to container
-WORKDIR /usr/share/nginx/html
-# COPY ./env.sh .
+# WORKDIR /usr/share/nginx/html
+# COPY ./env .
 COPY .env .
 
 # Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
+CMD ["yarn start"]
+
 
