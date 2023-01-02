@@ -1,5 +1,5 @@
 # FROM node:14-alpine AS builder
-FROM node:18.12.1 AS builder
+FROM node:16.19.0 AS builder
 
 WORKDIR /app
 # Cache and Install dependencies
@@ -29,6 +29,6 @@ COPY .env .
 
 # Start Nginx server
 # CMD ["nginx", "-g", "daemon off;"]
-CMD ["yarn run dev"]
+CMD ["yarn start"]
 
 
