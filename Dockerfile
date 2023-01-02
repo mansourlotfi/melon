@@ -29,6 +29,6 @@ COPY .env .
 
 # Start Nginx server
 # CMD ["nginx", "-g", "daemon off;"]
-CMD yarn run dev
+CMD yarn start
 
 
